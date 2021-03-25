@@ -16,6 +16,7 @@ public class DKDefaultListableBeanFactory extends DKAbstractApplicationContext {
     /**
      * Map of bean definition objects, keyed by bean name
      */
-    protected final Map<String, DKBeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, DKBeanDefinition>(256);
+    protected final Map<String, DKBeanDefinition> beanDefinitionMap =
+        new ConcurrentHashMap<String, DKBeanDefinition>(256);
 
 }

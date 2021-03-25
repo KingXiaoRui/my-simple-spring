@@ -6,4 +6,5 @@ package com.king.demo.myspring.beans;
  * @date 2019/4/25
  */
 public interface DKFactoryBean {
+
 }

@@ -21,18 +21,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DKApplicationContext extends DKDefaultListableBeanFactory implements DKBeanFactory {
 
-    private String[] configLocations;
+    private final String[] configLocations;
+
     private DKBeanDefinitionReader reader;
 
     //作为单例的IOC容器缓存
-    private Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+
     //通用的IOC容器
-    private Map<String, DKBeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+    private final Map<String, DKBeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+
 
     public DKApplicationContext(String... configLocations) {
         this.configLocations = configLocations;
         refresh();
     }
+
 
     @Override
     protected void refresh() {
@@ -50,6 +54,7 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
 
     }
 
+
     /**
      * 只处理不是延时加载的情况
      */
@@ -62,12 +67,14 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
         }
     }
 
+
     private void doRegisterBeanDefinition(List<DKBeanDefinition> beanDefinitionList) {
 
         for (DKBeanDefinition beanDefinition : beanDefinitionList) {
             super.beanDefinitionMap.put(beanDefinition.getFactoryBeanName(), beanDefinition);
         }
     }
+
 
     @Override
     public Object getBean(String beanName) {
@@ -83,6 +90,7 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
 
         return this.factoryBeanInstanceCache.get(beanName).getWrappedInstance();
     }
+
 
     private void populateBean(String beanName, DKBeanDefinition dkBeanDefinition, DKBeanWrapper dkBeanWrapper) {
         Object instance = dkBeanWrapper.getWrappedInstance();
@@ -116,6 +124,7 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
 
     }
 
+
     private DKBeanWrapper instantiateBean(String beanName, DKBeanDefinition dkBeanDefinition) {
         //1、拿到要实例化的对象的类名
         String className = dkBeanDefinition.getBeanClassName();
@@ -148,4 +157,5 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
 
         return beanWrapper;
     }
+
 }

@@ -20,15 +20,17 @@ public class DKBeanDefinitionReader {
     //固定配置文件中的Bean，相当于XML的规范
     private final String SCAN_PACKAGE = "scanPackage";
 
-    private Properties config = new Properties();
-    private List<String> registryBeanClasses = new ArrayList<>();
+    private final Properties config = new Properties();
+
+    private final List<String> registryBeanClasses = new ArrayList<>();
+
 
     public DKBeanDefinitionReader(String... configLocations) {
 
         //通过URL定位找到所对应的文件，然后转换为文件流
         InputStream inputStream = this.getClass()
-                .getClassLoader()
-                .getResourceAsStream(configLocations[0].replace("classpath:", ""));
+            .getClassLoader()
+            .getResourceAsStream(configLocations[0].replace("classpath:", ""));
 
         try {
             config.load(inputStream);
@@ -47,6 +49,7 @@ public class DKBeanDefinitionReader {
         doScanner(this.config.getProperty(SCAN_PACKAGE));
     }
 
+
     private void doScanner(String property) {
         URL url = this.getClass().getClassLoader().getResource("/" + property.replaceAll("\\.", "/"));
         File classpath = new File(url.getFile());
@@ -63,9 +66,11 @@ public class DKBeanDefinitionReader {
         }
     }
 
+
     public Properties getConfig() {
         return this.config;
     }
+
 
     /**
      * 将配置文件中扫描到的所有配置信息转换成一个DKBeanDefinition对象，便于使用。
@@ -96,11 +101,13 @@ public class DKBeanDefinitionReader {
         return result;
     }
 
+
     /**
      * 把每一个配置信息解析成BeanDefinition
      *
      * @param simpleName
      * @param className
+     *
      * @return
      */
     private DKBeanDefinition doCreateBeanDefinition(String simpleName, String className) {
@@ -114,10 +121,12 @@ public class DKBeanDefinitionReader {
 
     }
 
+
     private String toLowerFirstCase(String beanName) {
         char[] chars = beanName.toCharArray();
 
         chars[0] += 32;
         return String.valueOf(chars);
     }
+
 }

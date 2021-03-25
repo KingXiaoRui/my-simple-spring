@@ -7,7 +7,8 @@ import java.lang.annotation.*;
  * @description
  * @date 2019/4/25
  */
-@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD,
+    ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DKAutowired {
@@ -17,4 +18,5 @@ public @interface DKAutowired {
      * <p>Defaults to {@code true}.
      */
     String value() default "";
+
 }
