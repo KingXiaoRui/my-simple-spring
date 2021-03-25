@@ -23,13 +23,13 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
 
     private final String[] configLocations;
 
-    private DKBeanDefinitionReader reader;
-
     //作为单例的IOC容器缓存
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
     //通用的IOC容器
     private final Map<String, DKBeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+
+    private DKBeanDefinitionReader reader;
 
 
     public DKApplicationContext(String... configLocations) {
@@ -140,11 +140,7 @@ public class DKApplicationContext extends DKDefaultListableBeanFactory implement
                 this.singletonObjects.put(className, instance);
                 this.singletonObjects.put(dkBeanDefinition.getFactoryBeanName(), instance);
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

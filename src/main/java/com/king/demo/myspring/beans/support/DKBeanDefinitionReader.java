@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -16,9 +17,6 @@ import java.util.Properties;
  * @date 2019/4/25
  */
 public class DKBeanDefinitionReader {
-
-    //固定配置文件中的Bean，相当于XML的规范
-    private final String SCAN_PACKAGE = "scanPackage";
 
     private final Properties config = new Properties();
 
@@ -46,14 +44,19 @@ public class DKBeanDefinitionReader {
             }
         }
 
-        doScanner(this.config.getProperty(SCAN_PACKAGE));
+        /*
+         * 固定配置文件中的Bean，相当于XML的规范
+         */
+        String scanPackage = "scanPackage";
+        doScanner(getConfig().getProperty(scanPackage));
     }
 
 
     private void doScanner(String property) {
         URL url = this.getClass().getClassLoader().getResource("/" + property.replaceAll("\\.", "/"));
+        assert url != null;
         File classpath = new File(url.getFile());
-        for (File file : classpath.listFiles()) {
+        for (File file : Objects.requireNonNull(classpath.listFiles())) {
             if (file.isDirectory()) {
                 doScanner(property + "." + file.getName());
             } else {
@@ -75,7 +78,7 @@ public class DKBeanDefinitionReader {
     /**
      * 将配置文件中扫描到的所有配置信息转换成一个DKBeanDefinition对象，便于使用。
      *
-     * @return
+     * @return Bean Definition List
      */
     public List<DKBeanDefinition> loadBeanDefinitions() {
         List<DKBeanDefinition> result = new ArrayList<>();
@@ -106,9 +109,11 @@ public class DKBeanDefinitionReader {
      * 把每一个配置信息解析成BeanDefinition
      *
      * @param simpleName
+     *     bean simple name
      * @param className
+     *     class name
      *
-     * @return
+     * @return bean definition
      */
     private DKBeanDefinition doCreateBeanDefinition(String simpleName, String className) {
 
